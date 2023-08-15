@@ -1,2 +1,2 @@
 # dadi-game
-dadigame.aspx
+dadi game/dadigame.aspx
