@@ -1,4 +1,6 @@
-﻿function playerschange(id) {
+﻿
+
+function playerschange(id) {
     let payerid = id;
 
     if (payerid == "player1") {
@@ -24,17 +26,17 @@ $(document).ready(function () {
         $("#" + payer1imges[e]).show();
         $("#" + payer2imges[e]).show();
     }
-    if (payerid == "player1") {
+    if (payerid == "player2") {
 
-        for (k = 0; k < payer2imges.length; k++) {
-            $("#" + payer2imges[k]).hide();
+        for (k = 0; k < payer1imges.length; k++) {
+            $("#" + payer1imges[k]).hide();
         }
 
 
     } else {
 
-        for (l = 0; l < payer1imges.length; l++) {
-            $("#" + payer1imges[l]).hide();
+        for (l = 0; l < payer2imges.length; l++) {
+            $("#" + payer2imges[l]).hide();
         }
     }
 
@@ -141,8 +143,8 @@ function playerchange(id) {
 
 
     if (imagedata != "") {
- 
-        if ((payerid == "player1") && (whiteimagename == "white.png") && (imagedata != "" )) {
+
+        if ((payerid == "player1") && (whiteimagename == "white.png") && (imagedata != "")) {
 
             $("#player1,#player2").css("background-color", "aqua");
             $("#player1,#player2").css("color", "black");
@@ -193,10 +195,11 @@ function playerchange(id) {
                 }
             }
 
+            movedatachange('red.png', id);
 
 
-
-        } else if ((payerid == "player2") && (whiteimagename == "white.png") && (imagedata != "") ) {
+        }
+        else if ((payerid == "player2") && (whiteimagename == "white.png") && (imagedata != "")) {
 
             $("#player1,#player2").css("background-color", "aqua");
             $("#player1,#player2").css("color", "black");
@@ -249,16 +252,21 @@ function playerchange(id) {
 
                 }
             }
+
+            movedatachange('yellow.png', id);
+
+
         }
+        else {
 
-    } else {
-
-        document.getElementById(id).src = "images/" + whiteimagename;
-    }
-     
+            document.getElementById(id).src = "images/" + whiteimagename;
+        }
+    }   
 }
 
-function movedatachange() {
+function imagechange(id) {
+
+    document.getElementById(id).src = "images/white.png";
 
     for (a = 0; a < imagesids.length; a++) {
         let allimg = document.getElementById(imagesids[a]).src;
@@ -286,6 +294,110 @@ function movedatachange() {
 
         }
     }
+    
+}
+
+
+
+function movedatachange(imagecolor,whiteid) {
+
+
+    let dadidata = dadicombinations(whiteid);
+    let datasplit = dadidata.split("|");
+    let daadi = "";
+    for (u = 0; u < datasplit.length; u++) {
+        let dadis = datasplit[u].split(",");
+        da1 = $("#" + dadis[0]).attr("src").split("/")[1];
+        da2 = $("#" + dadis[1]).attr("src").split("/")[1];
+        da3 = $("#" + dadis[2]).attr("src").split("/")[1];
+        if (da1 == "red.png" && da2 == "red.png" && da3 == "red.png") {
+
+            daadi = "true";
+        } else if (da1 == "yellow.png" && da2 == "yellow.png" && da3 == "yellow.png") {
+
+            daadi = "true";
+        } else {
+            
+        }
+    }
+
+
+    if (daadi == "true") {
+
+        if (imagecolor == "red.png") {
+
+            for (w = 0; w < imagesids.length; w++) {
+                $("#" + imagesids[w]).removeAttr("onclick", "onclick");
+                let image = $("#" + imagesids[w]).attr("src").split("/")[1];
+                if (image == "yellow.png") {
+                    $("#" + imagesids[w]).attr("onclick", "imagechange(this.id)");
+
+                }
+
+            }
+            
+
+        } else if (imagecolor == "yellow.png") {
+
+            for (w = 0; w < imagesids.length; w++) {
+                $("#" + imagesids[w]).removeAttr("onclick", "onclick");
+                let image = $("#" + imagesids[w]).attr("src").split("/")[1];
+                if (image == "red.png") {
+                    $("#" + imagesids[w]).attr("onclick", "imagechange(this.id)");
+
+                }
+
+            }
+
+        }
+        
+
+    } else {
+
+
+
+
+        for (a = 0; a < imagesids.length; a++) {
+            let allimg = document.getElementById(imagesids[a]).src;
+            let whiteimge = allimg.split("/")[4];
+            if (whiteimge == "white.png") {
+
+                $("#" + imagesids[a]).removeAttr("onclick", "onclick");
+
+                /*$("#" + imagesids[a]).attr("onclick", "playerchange(this.id)");*/
+            } else {
+                let playername = $("#hdnmovedata").val();
+
+                $("#" + imagesids[a]).removeAttr("onclick", "onclick");
+
+                if (playername == "player1" && whiteimge == "red.png") {
+
+                    $("#" + imagesids[a]).attr("onclick", "datamoving(this.id)");
+
+                } else if (playername == "player2" && whiteimge == "yellow.png") {
+
+                    $("#" + imagesids[a]).attr("onclick", "datamoving(this.id)");
+
+                }
+
+
+            }
+        }
+
+
+
+
+
+
+
+    }
+    
+
+
+
+
+
+
 }
 
 
@@ -338,11 +450,11 @@ function datamoving(id) {
 
                 $("#" + specpoid).removeAttr("onclick", "datamoving(this.id)");
 
-                if (playername == "player1" && imagename == "red.png") {
+                if (playername == "player1" && imagecolors[1] == "red.png") {
 
                     $("#" + specpoid).attr("onclick", "datamoving(this.id)");
 
-                } else if (playername == "player2" && imagename == "yellow.png") {
+                } else if (playername == "player2" && imagecolors[1] == "yellow.png") {
 
                     $("#" + specpoid).attr("onclick", "datamoving(this.id)");
 
@@ -406,7 +518,7 @@ function datamoving(id) {
             $("#hdnimageids").val("");
             $("#hdnstorids").val("");
             $("#hdntrueorfalls").val("");
-            movedatachange();
+            movedatachange('red.png', id);
             
         }
     } else if ((playername == "player2") && (imagename == "white.png") && ($("#hdnmovedatatonearplace").val() != "") && ($("#hdntrueorfalls").val() == "true")) {
@@ -439,7 +551,7 @@ function datamoving(id) {
             $("#hdnimageids").val("");
             $("#hdnstorids").val("");
             $("#hdntrueorfalls").val("");
-            movedatachange();
+            movedatachange('yellow.png', id);
             
         }
         
@@ -469,6 +581,13 @@ function moingdataspecific(id) {
 
     return ids[id - 1];
 }
+
+function dadicombinations(id) {
+    const ids = ["1,2,3|1,10,22", "1,2,3|2,5,8", "1,2,3|3,15,24", "4,5,6|4,11,19", "4,5,6|2,5,8", "4,5,6|6,14,21", "7,8,9|7,12,16", "7,8,9|2,5,8", "7,8,9|9,13,18", "10,11,12|1,10,22", "10,11,12|4,11,19", "10,11,12|7,12,16", "13,14,15|9,13,18", "13,14,15|6,14,21", "13,14,15|3,15,24", "16,17,18|7,12,16", "16,17,18|17,20,23", "16,17,18|18,13,9", "19,11,4|19,20,21", "17,20,23|19,20,21", "19,20,21|6,14,21", "22,23,24|1,10,22", "22,23,24|17,20,23", "22,23,24|3,15,24"];
+    return ids[id - 1];
+}
+
+
 
 $(document).ready(function () {
 
